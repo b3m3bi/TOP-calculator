@@ -26,6 +26,15 @@ html {
     height: 100px;
     border-radius: 16px;
     margin: 32px 0 16px 0;
+
+    font-family: "JetBrains Mono", monospace;
+    font-size: 48pt;
+
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    padding: 16px;
+    
 }
 
 .btns-container{
