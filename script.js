@@ -89,8 +89,16 @@ btnsContainer.addEventListener('click', (event) => {
             } 
             // Number of digits can't be greater than 13 to avoid
             // overflow from display
-            if (displayCapture.textContent.trim().length <= 10){
-                displayCapture.textContent = displayCapture.textContent + clickedValue;
+            let currentDisplay = displayCapture.textContent.trim()
+            if (currentDisplay.length <= 10){
+                if (clickedValue === '.'){
+                    let numberOfPoints = (currentDisplay.split('').filter(c => c === '.')).length
+                    if (numberOfPoints < 1){
+                        displayCapture.textContent = currentDisplay + clickedValue;
+                    }
+                } else {
+                    displayCapture.textContent = currentDisplay + clickedValue;
+                }
             }
         }
     }
