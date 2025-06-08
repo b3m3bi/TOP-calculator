@@ -28,7 +28,7 @@ html {
     margin: 32px 0 16px 0;
 
     font-family: "JetBrains Mono", monospace;
-    font-size: 48pt;
+    font-size: 46pt;
 
     display: flex;
     align-items: center;
@@ -57,6 +57,8 @@ html {
     color: white;
     font-weight: 800;
     font-size: 30pt;
+
+    user-select: none;
 }
 
 .btn-number {
@@ -101,4 +103,6 @@ html {
     gap: 8px;
 }
 
-
+.btn:active {
+    background-color: black;
+}
