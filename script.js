@@ -123,8 +123,8 @@ function getResultMermoryOperation(){
     num2 = displayCapture.textContent.trim();
     let result = operate(operator, +num1, +num2);
     if (result === Infinity || !result){
-        result = "ERROR";
         error = true;
+        return "ERROR";
     }
     return parseFloat(result.toFixed(3));
 }
