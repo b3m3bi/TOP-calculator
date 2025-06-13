@@ -40,24 +40,29 @@ const operators = ['+', '*', '-', '/'];
 btnsContainer.addEventListener('click', (event) => {
     if (event.target.classList.contains('btn')){
         let clickedValue = event.target.textContent;
-        console.log(clickedValue);
+        detectAndExecuteInput(clickedValue);
+        
+    }
+})
 
-        if (clickedValue === 'AC'){
+
+function detectAndExecuteInput(inputValue){
+    if (inputValue === 'AC'){
             resetMemory();
             displayCapture.textContent = '';
             error = false;
-        } else if (clickedValue === 'DEL' && !error){
+        } else if ((inputValue === 'DEL' || inputValue ==='Backspace') && !error){
             let updatedValue = displayCapture.textContent.slice(0, -1);
             displayCapture.textContent = updatedValue;
 
-        } else if (operators.includes(clickedValue)  && !error) {
+        } else if (operators.includes(inputValue)  && !error) {
 
             if (displayCapture.textContent){
                 // If there is any number in display...
                 if (!operator){
                     // If there is not an operator in memory yet...
                     // Save number in display and operator in memory 
-                    operator = clickedValue;
+                    operator = inputValue;
                     num1 = displayCapture.textContent.trim();
 
                     displayCapture.textContent = '';
@@ -70,10 +75,14 @@ btnsContainer.addEventListener('click', (event) => {
                     displayCapture.textContent = resultPreviousOperaton;
 
                     num1 = resultPreviousOperaton;
-                    operator = clickedValue;
+                    operator = inputValue;
                 }
+            } else if (inputValue === '-'){
+                // If there is not any input and minus is entered the number is negativa
+                displayCapture.textContent = inputValue;
+
             }
-        } else if (clickedValue === '='  && !error){
+        } else if ((inputValue === '=' || inputValue === 'Enter')  && !error){
             if (operator && displayCapture.textContent){
                 // If there was an operator and second number, operate...
                 // Remove numbers and operators form memory...
@@ -91,19 +100,17 @@ btnsContainer.addEventListener('click', (event) => {
             // overflow from display
             let currentDisplay = displayCapture.textContent.trim()
             if (currentDisplay.length <= 10){
-                if (clickedValue === '.'){
+                if (inputValue === '.'){
                     let numberOfPoints = (currentDisplay.split('').filter(c => c === '.')).length
                     if (numberOfPoints < 1){
-                        displayCapture.textContent = currentDisplay + clickedValue;
+                        displayCapture.textContent = currentDisplay + inputValue;
                     }
                 } else {
-                    displayCapture.textContent = currentDisplay + clickedValue;
+                    displayCapture.textContent = currentDisplay + inputValue;
                 }
             }
         }
-    }
-
-})
+}
 
 
 function resetMemory(){
@@ -119,5 +126,16 @@ function getResultMermoryOperation(){
         result = "ERROR";
         error = true;
     }
-    return result;
+    return parseFloat(result.toFixed(3));
 }
+
+document.addEventListener("keydown", (event) => {
+    let keyName = event.key; 
+    const validKeyboardValues = ['1','2','3','4','5','6','7','8','9','0','-','+','*','/','.','Enter','Backspace']
+    if (keyName === '/') {
+        event.preventDefault();
+    }
+    if (validKeyboardValues.includes(keyName)){
+        detectAndExecuteInput(keyName)
+    }
+})
