@@ -19,6 +19,7 @@ let num1 = '';
 let num2 = '';
 let operator = '';
 let error = false;
+let displayResult = false;
 
 function operate(operator, num1, num2){
     switch (operator) {
@@ -48,68 +49,79 @@ btnsContainer.addEventListener('click', (event) => {
 
 function detectAndExecuteInput(inputValue){
     if (inputValue === 'AC'){
-            resetMemory();
-            displayCapture.textContent = '';
-            error = false;
-        } else if ((inputValue === 'DEL' || inputValue ==='Backspace') && !error){
-            let updatedValue = displayCapture.textContent.slice(0, -1);
-            displayCapture.textContent = updatedValue;
+        resetMemory();
+        displayCapture.textContent = '';
+        error = false;
+    } else if ((inputValue === 'DEL' || inputValue ==='Backspace') && !error){
+        let updatedValue = displayCapture.textContent.slice(0, -1);
+        displayCapture.textContent = updatedValue;
+    } else if (operators.includes(inputValue)  && !error) {
+        if (displayCapture.textContent){
+            // If there is any number in display...
+            if (!operator){
+                // If there is not an operator in memory yet...
+                // Save number in display and operator in memory 
+                operator = inputValue;
+                num1 = displayCapture.textContent.trim();
+                displayResult = false;
 
-        } else if (operators.includes(inputValue)  && !error) {
-
-            if (displayCapture.textContent){
-                // If there is any number in display...
-                if (!operator){
-                    // If there is not an operator in memory yet...
-                    // Save number in display and operator in memory 
-                    operator = inputValue;
-                    num1 = displayCapture.textContent.trim();
-
-                    displayCapture.textContent = '';
-                } else {
-                    // If there is already an operator in memory...
-                    // Make operation in memory using number in display
-                    // as second number, and display result
+                displayCapture.textContent = '';
+            } else {
+                // If there is already an operator in memory...
+                if (!displayResult){
+                    // If there is a number in display that is not a result
+                    // of previous operations, make operation in memory 
+                    // using number in display as second number, and display result
                     // Save result and new operator in memory
                     let resultPreviousOperaton = getResultMermoryOperation();
                     displayCapture.textContent = resultPreviousOperaton;
+                    displayResult = true
 
                     num1 = resultPreviousOperaton;
                     operator = inputValue;
-                }
-            } else if (inputValue === '-'){
-                // If there is not any input and minus is entered the number is negativa
-                displayCapture.textContent = inputValue;
-
-            }
-        } else if ((inputValue === '=' || inputValue === 'Enter')  && !error){
-            if (operator && displayCapture.textContent){
-                // If there was an operator and second number, operate...
-                // Remove numbers and operators form memory...
-                let result = getResultMermoryOperation();
-                displayCapture.textContent = result;
-                
-                resetMemory();
-    
-            }
-        } else if (!error) {
-            if (operator && num2){
-                displayCapture.textContent = '';
-            } 
-            // Number of digits can't be greater than 13 to avoid
-            // overflow from display
-            let currentDisplay = displayCapture.textContent.trim()
-            if (currentDisplay.length <= 10){
-                if (inputValue === '.'){
-                    let numberOfPoints = (currentDisplay.split('').filter(c => c === '.')).length
-                    if (numberOfPoints < 1){
-                        displayCapture.textContent = currentDisplay + inputValue;
-                    }
                 } else {
-                    displayCapture.textContent = currentDisplay + inputValue;
+                    // if number displayed is a result of previous
+                    // operations do not operate, just update memory
+                    operator = inputValue;
                 }
+                
+            }
+        } else if (inputValue === '-'){
+            // If there is not any input and minus is entered the number is negative
+            displayCapture.textContent = inputValue;
+        }
+    } else if ((inputValue === '=' || inputValue === 'Enter')  && !error){
+        if (operator && displayCapture.textContent && !displayResult){
+            // If there was an operator and second number that 
+            // is not result of previos operation, operate...
+            // Remove numbers and operators form memory...
+            let result = getResultMermoryOperation();
+            displayCapture.textContent = result;
+            displayResult = true;
+                
+            resetMemory();
+        }
+    } else if (!error) {
+        if (operator && num2){
+            displayCapture.textContent = '';
+            num2 = '';
+        } 
+        // Number of digits can't be greater than 13 to avoid
+        // overflow from display
+        let currentDisplay = displayCapture.textContent.trim()
+        if (currentDisplay.length <= 10){
+            if (inputValue === '.'){
+                let numberOfPoints = (currentDisplay.split('').filter(c => c === '.')).length
+                if (numberOfPoints < 1){
+                    displayCapture.textContent = currentDisplay + inputValue;
+                    displayResult = false;
+                }
+            } else {
+                displayCapture.textContent = currentDisplay + inputValue;
+                displayResult = false;
             }
         }
+    }
 }
 
 
@@ -122,7 +134,7 @@ function resetMemory(){
 function getResultMermoryOperation(){
     num2 = displayCapture.textContent.trim();
     let result = operate(operator, +num1, +num2);
-    if (result === Infinity || !result){
+    if (result === Infinity){
         error = true;
         return "ERROR";
     }
@@ -137,5 +149,8 @@ document.addEventListener("keydown", (event) => {
     }
     if (validKeyboardValues.includes(keyName)){
         detectAndExecuteInput(keyName)
+    }
+    if (error && keyName === 'Backspace'){
+        detectAndExecuteInput('AC');
     }
 })
