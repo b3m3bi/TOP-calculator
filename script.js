@@ -80,17 +80,30 @@ function executeInput(inputValue){
                     // Save result and new operator in memory
                     let resultPreviousOperaton = getResultMermoryOperation();
                     displayCapture.textContent = resultPreviousOperaton;
-                    displayMemory.textContent = `${num1} ${operator} ${num2}`;
                     displayResult = true
-
+                    
                     num1 = resultPreviousOperaton;
                     operator = inputValue;
+
+                    displayCapture.textContent = '';
+                    displayMemory.textContent = `${num1} ${operator}`;
                 }  
             }
         } else {
             // If there is not any input update operation in memory
             operator = inputValue;
             displayMemory.textContent = `${num1} ${operator}`;
+        }
+    } else if (inputValue === '±') {
+        let currentDisplay = displayCapture.textContent.trim()
+        // If there is a number in display toggle sign...
+        if (currentDisplay) {
+            if (currentDisplay[0] === '-'){
+                console.log('aqui')
+                displayCapture.textContent = currentDisplay.slice(1);
+            } else {
+                displayCapture.textContent = '-' + currentDisplay;
+            }
         }
     } else if ((inputValue === '=' || inputValue === 'Enter')  && !error){
         if (operator && displayCapture.textContent && !displayResult){
