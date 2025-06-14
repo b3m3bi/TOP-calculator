@@ -85,16 +85,12 @@ function executeInput(inputValue){
 
                     num1 = resultPreviousOperaton;
                     operator = inputValue;
-                } else {
-                    // if number displayed is a result of previous
-                    // operations do not operate, just update memory
-                    operator = inputValue;
-                }
-                
+                }  
             }
-        } else if (inputValue === '-'){
-            // If there is not any input and minus is entered the number is negative
-            displayCapture.textContent = inputValue;
+        } else {
+            // If there is not any input update operation in memory
+            operator = inputValue;
+            displayMemory.textContent = `${num1} ${operator}`;
         }
     } else if ((inputValue === '=' || inputValue === 'Enter')  && !error){
         if (operator && displayCapture.textContent && !displayResult){
@@ -148,7 +144,7 @@ function resetMemory(){
 function getResultMermoryOperation(){
     num2 = displayCapture.textContent.trim();
     let result = operate(operator, +num1, +num2);
-    if (result === Infinity){
+    if (result === Infinity || isNaN(result)){
         error = true;
         return "ERROR";
     }
