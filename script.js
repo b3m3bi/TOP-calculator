@@ -36,25 +36,29 @@ function operate(operator, num1, num2){
 
 const btnsContainer = document.querySelector('.btns-container');
 const displayCapture = document.querySelector('#capture');
+const displayMemory = document.querySelector('#memory');
+
 const operators = ['+', '*', '-', '/'];
 
 btnsContainer.addEventListener('click', (event) => {
     if (event.target.classList.contains('btn')){
         let clickedValue = event.target.textContent;
-        detectAndExecuteInput(clickedValue);
+        executeInput(clickedValue);
         
     }
 })
 
 
-function detectAndExecuteInput(inputValue){
+function executeInput(inputValue){
     if (inputValue === 'AC'){
-        resetMemory();
-        displayCapture.textContent = '';
-        error = false;
+        clearAll();
     } else if ((inputValue === 'DEL' || inputValue ==='Backspace' || inputValue === 'Delete') && !error){
-        let updatedValue = displayCapture.textContent.slice(0, -1);
-        displayCapture.textContent = updatedValue;
+        if (displayCapture.textContent !== ''){
+            let updatedValue = displayCapture.textContent.slice(0, -1);
+            displayCapture.textContent = updatedValue;
+        } else {
+            clearAll();
+        }
     } else if (operators.includes(inputValue)  && !error) {
         if (displayCapture.textContent){
             // If there is any number in display...
@@ -66,6 +70,7 @@ function detectAndExecuteInput(inputValue){
                 displayResult = false;
 
                 displayCapture.textContent = '';
+                displayMemory.textContent = `${num1} ${operator}`;
             } else {
                 // If there is already an operator in memory...
                 if (!displayResult){
@@ -75,6 +80,7 @@ function detectAndExecuteInput(inputValue){
                     // Save result and new operator in memory
                     let resultPreviousOperaton = getResultMermoryOperation();
                     displayCapture.textContent = resultPreviousOperaton;
+                    displayMemory.textContent = `${num1} ${operator} ${num2}`;
                     displayResult = true
 
                     num1 = resultPreviousOperaton;
@@ -97,6 +103,8 @@ function detectAndExecuteInput(inputValue){
             // Remove numbers and operators form memory...
             let result = getResultMermoryOperation();
             displayCapture.textContent = result;
+            displayMemory.textContent = `${num1} ${operator} ${num2}`;
+
             displayResult = true;
                 
             resetMemory();
@@ -124,6 +132,12 @@ function detectAndExecuteInput(inputValue){
     }
 }
 
+function clearAll(){
+    resetMemory();
+    displayCapture.textContent = '';
+    displayMemory.textContent = '';
+    error = false;
+}
 
 function resetMemory(){
     num1 = '';
@@ -148,9 +162,9 @@ document.addEventListener("keydown", (event) => {
         event.preventDefault();
     }
     if (validKeyboardValues.includes(keyName)){
-        detectAndExecuteInput(keyName)
+        executeInput(keyName)
     }
     if (error && (keyName === 'Backspace' || keyName === 'Delete')){
-        detectAndExecuteInput('AC');
+        executeInput('AC');
     }
 })
