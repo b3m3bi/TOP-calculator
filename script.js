@@ -52,7 +52,7 @@ function detectAndExecuteInput(inputValue){
         resetMemory();
         displayCapture.textContent = '';
         error = false;
-    } else if ((inputValue === 'DEL' || inputValue ==='Backspace') && !error){
+    } else if ((inputValue === 'DEL' || inputValue ==='Backspace' || inputValue === 'Delete') && !error){
         let updatedValue = displayCapture.textContent.slice(0, -1);
         displayCapture.textContent = updatedValue;
     } else if (operators.includes(inputValue)  && !error) {
@@ -143,14 +143,14 @@ function getResultMermoryOperation(){
 
 document.addEventListener("keydown", (event) => {
     let keyName = event.key; 
-    const validKeyboardValues = ['1','2','3','4','5','6','7','8','9','0','-','+','*','/','.','Enter','Backspace']
+    const validKeyboardValues = ['1','2','3','4','5','6','7','8','9','0','-','+','*','/','.','Enter','Backspace','Delete']
     if (keyName === '/') {
         event.preventDefault();
     }
     if (validKeyboardValues.includes(keyName)){
         detectAndExecuteInput(keyName)
     }
-    if (error && keyName === 'Backspace'){
+    if (error && (keyName === 'Backspace' || keyName === 'Delete')){
         detectAndExecuteInput('AC');
     }
 })
