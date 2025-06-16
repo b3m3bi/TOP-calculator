@@ -23,7 +23,7 @@ html {
 .display{
     background-color: #AFAFAF;
     width: 432px;
-    height: 132px;
+    height: 148px;
     border-radius: 16px;
     margin: 32px 0 16px 0;
 
@@ -31,22 +31,24 @@ html {
     display: flex;
     flex-direction: column;
     align-items: end;
-    justify-content: start;
+    justify-content: space-between;
     padding: 16px;
 
     
 }
 
 #capture {
-    font-size: 42pt;
-    height: 70px;
-    /* outline: solid red; */
+    height: 50px;
+    width: 100%;
+    text-align: end;
 }
 
 #memory {
-    height: 30px;
-    font-size: 16pt;
-    /* outline: solid green; */
+    height: 50px;
+    width: 100%;
+    font-size: 14pt;
+    text-align: end;
+
 }
 
 .btns-container{

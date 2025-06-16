@@ -123,10 +123,10 @@ function executeInput(inputValue){
             displayCapture.textContent = '';
             num2 = '';
         } 
-        // Number of digits can't be greater than 13 to avoid
+        // Number of digits can't be greater than 21 to avoid
         // overflow from display
         let currentDisplay = displayCapture.textContent.trim()
-        if (currentDisplay.length <= 10){
+        if (currentDisplay.length <= 22){
             if (inputValue === '.'){
                 let numberOfPoints = (currentDisplay.split('').filter(c => c === '.')).length
                 if (numberOfPoints < 1){
@@ -177,3 +177,16 @@ document.addEventListener("keydown", (event) => {
         executeInput('AC');
     }
 })
+
+
+const resizeFont = () => {
+    if (displayCapture.textContent.trim().length <= 11 ){
+        displayCapture.style.fontSize = '35pt';
+    } else {
+        displayCapture.style.fontSize = '20pt';
+    }
+}
+
+const observer = new MutationObserver(resizeFont);
+
+observer.observe(displayCapture, {childList: true});
