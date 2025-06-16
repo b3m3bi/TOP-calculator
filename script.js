@@ -157,7 +157,7 @@ function resetMemory(){
 function getResultMermoryOperation(){
     num2 = displayCapture.textContent.trim();
     let result = operate(operator, +num1, +num2);
-    if (result === Infinity || isNaN(result)){
+    if (result === Infinity || result === - Infinity || isNaN(result)){
         error = true;
         return "ERROR";
     }
